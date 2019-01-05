@@ -1,36 +1,24 @@
 //
-//  UserInformationTableViewController.swift
+//  NotificationTableViewController.swift
 //  iOS_final_project
 //
-//  Created by yochien on 2019/1/4.
+//  Created by yochien on 2019/1/5.
 //  Copyright © 2019 yochien. All rights reserved.
 //
 
 import UIKit
 
-class UserInformationTableViewController: UITableViewController {
+class NotificationTableViewController: UITableViewController {
     
     var userData : UserData?
-    
-
-    @IBOutlet weak var userImage: UIImageView!
-    @IBOutlet weak var userName: UILabel!
-    @IBOutlet weak var userEmail: UILabel!
+    var notificationListData : NotificationListData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         if let data = UserData.read() {
             userData = data
-            print(userData?.name)
-            print(userData?.email)
-            print(userData?.facebookID)
-            print(userData?.pictureUrl)
-            print(userData?.facebookAccessToken)
-            let url = URL(string: userData?.pictureUrl ?? "")
-            let imageData = try? Data(contentsOf: url!)
-            userImage.image = UIImage(data: imageData!)
-            userName.text = userData?.name
-            userEmail.text = userData?.email
             
         } else {
             //no user data
@@ -38,36 +26,73 @@ class UserInformationTableViewController: UITableViewController {
             
         }
         
+        let url = URL(string: "http://140.121.197.197:3000/getUserNotificationList?facebook_token="+userData!.facebookAccessToken)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            if let data = data, let results = try?
+                decoder.decode(NotificationListData.self, from: data)
+            {
+                print("json load success")
+                print(results)
+                self.notificationListData = results
+                self.tableView.reloadData()
+            } else {
+                print("error")
+            }
+        }
+        
+        task.resume()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
     }
 
     // MARK: - Table view data source
-    /*
+/*
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
+        if let notificationNum = self.notificationListData?.data.count {
+            print("count",notificationNum)
+            return notificationNum
+        } else {
+            print("count nil")
+            return 0
+        }
+        
+    }*/
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        if let notificationNum = self.notificationListData?.data.count {
+            print("count",notificationNum)
+            return notificationNum
+        } else {
+            print("count nil")
+            return 0
+        }
     }
-     */
-
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationTableViewCell", for: indexPath) as! NotificationTableViewCell
+        
         // Configure the cell...
-
+        if let notification = notificationListData?.data[indexPath.row]{
+            
+            cell.lat.text = String(format: "%.4f", notification.data.lat)
+            cell.lon.text = String(format: "%.4f", notification.data.lon)
+            cell.radius.text = String(notification.data.radius) + "公尺"
+            cell.time.text = notification.data.time
+        }
+        print("cell-",cell)
         return cell
     }
-    */
+
+    
 
     /*
     // Override to support conditional editing of the table view.

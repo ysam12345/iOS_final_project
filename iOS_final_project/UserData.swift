@@ -13,6 +13,7 @@ struct UserData: Codable {
     var email: String
     var facebookID: String
     var pictureUrl: String
+    var facebookAccessToken: String
     
     static func read() -> UserData? {
         if let data = UserDefaults.standard.data(forKey: "userData"), let userData = try? PropertyListDecoder().decode(UserData.self, from: data) {

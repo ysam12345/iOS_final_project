@@ -15,6 +15,10 @@ class LoginViewController: UIViewController {
 
     var userData: UserData?
     
+    @IBAction func unwindSegueToLogin(segue: UIStoryboardSegue){
+        //回到登入畫面的unwind segue
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -80,7 +84,9 @@ class LoginViewController: UIViewController {
                     let pictureUrl = pictureData["url"] as! String
                     print(pictureUrl)
                     
-                    UserData.save(userData: UserData(name: name, email: email, facebookID: facebookID, pictureUrl: pictureUrl))
+                    let facebookAccessToken = FBSDKAccessToken.current()?.tokenString as! String
+                    print(facebookAccessToken)
+                    UserData.save(userData: UserData(name: name, email: email, facebookID: facebookID, pictureUrl: pictureUrl, facebookAccessToken: facebookAccessToken))
                     
                     
                 }

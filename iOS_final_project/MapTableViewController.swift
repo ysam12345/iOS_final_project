@@ -13,14 +13,19 @@ class MapTableViewController: UITableViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var latlonLabel: UILabel!
-    @IBOutlet weak var radiusInput: UITextField!
+    @IBOutlet weak var radiusSegmented: UISegmentedControl!
     @IBOutlet weak var timeInput: UIDatePicker!
-    @IBOutlet weak var modeInput: UISegmentedControl!
+    @IBOutlet weak var addButton: UIButton!
     
+    var lat: Double = 0
+    var lon: Double = 0
+    
+    var userData : UserData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MapTableViewController.mapLongPress(_:))) // colon needs to pass through info
         longPress.minimumPressDuration = 1.0 // in seconds
         mapView.addGestureRecognizer(longPress)
@@ -31,17 +36,27 @@ class MapTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    @IBAction func addButtonPressed(_ sender: Any) {
+        print("AddButton has been pressed.")
+        print(lat,lon)
+        print(radiusSegmented.selectedSegmentIndex)
+        print(timeInput)
+    }
+    
     @objc func mapLongPress(_ recognizer: UIGestureRecognizer) {
         
         
         if(recognizer.state == UIGestureRecognizerState.began) {
             print("A long press has began.")
+            mapView.removeAnnotations(mapView.annotations)
             let touchedAt = recognizer.location(in: self.mapView) // adds the location on the view it was pressed
             let touchedAtCoordinate : CLLocationCoordinate2D = mapView.convert(touchedAt, toCoordinateFrom: self.mapView) // will get coordinates
             
             let newPin = MKPointAnnotation()
             newPin.coordinate = touchedAtCoordinate
             latlonLabel.text = String(format: "%.4f",touchedAtCoordinate.latitude) + String(format: ",%.4f",touchedAtCoordinate.longitude)
+            lat = touchedAtCoordinate.latitude
+            lon = touchedAtCoordinate.longitude
             mapView.addAnnotation(newPin)
         }
         
