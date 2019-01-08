@@ -20,6 +20,47 @@ class UserInformationTableViewController: UITableViewController {
     @IBOutlet weak var userEmail: UILabel!
     @IBOutlet weak var notificationFunctionSwitch: UISwitch!
     
+    @IBAction func pressPushNotificationToAllAccountButton(_ sender: Any) {
+        let alertController = UIAlertController(
+            title: "發送推播",
+            message: "請輸入推播內容",
+            preferredStyle: .alert)
+        
+        // 建立兩個輸入框
+        alertController.addTextField {
+            (textField: UITextField!) -> Void in
+            textField.placeholder = "推播內容"
+        }
+        
+        // 建立[取消]按鈕
+        let cancelAction = UIAlertAction(
+            title: "取消",
+            style: .cancel,
+            handler: nil)
+        alertController.addAction(cancelAction)
+        
+        // 建立[登入]按鈕
+        let okAction = UIAlertAction(
+            title: "發送",
+            style: UIAlertActionStyle.default) {
+                (action: UIAlertAction!) -> Void in
+                let notificationInput =
+                    (alertController.textFields?.first)!
+                        as UITextField
+                
+                print("推播內容：\(notificationInput.text)")
+                self.sendNotificationToAllAccount(content: notificationInput.text!)
+
+        }
+        alertController.addAction(okAction)
+        
+        // 顯示提示框
+        self.present(
+            alertController,
+            animated: true,
+            completion: nil)
+
+    }
     
     
     override func viewDidLoad() {
@@ -108,6 +149,19 @@ class UserInformationTableViewController: UITableViewController {
             } else {
                 print("error")
             }
+        }
+        
+        task.resume()
+    }
+    
+    func sendNotificationToAllAccount(content: String) {
+        let urlString = "http://140.121.197.197:3000/sendRemoteNotificationToAllAccount?facebook_token="+userData!.facebookAccessToken+"&content="+userData!.name+":"+content
+        print(urlString)
+        let urlWithPercentEscapes = urlString.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+        let url = URL(string: urlWithPercentEscapes!)!
+        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
         }
         
         task.resume()
