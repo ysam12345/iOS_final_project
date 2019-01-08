@@ -61,6 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return $0 + String(format: "%02x", $1)
         }
         print(deviceTokenString)
+        //save device token
+        DeviceToken.save(deviceToken: DeviceToken(token: deviceTokenString))
+        
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

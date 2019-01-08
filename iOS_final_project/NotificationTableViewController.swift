@@ -13,9 +13,17 @@ class NotificationTableViewController: UITableViewController {
     var userData : UserData?
     var notificationListData : NotificationListData?
     
+    struct NotificationData: Codable {
+        var lat: Float64
+        var lon: Float64
+        var radius: Int
+        var content: String
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.delegate = self
         
         if let data = UserData.read() {
             userData = data
@@ -26,25 +34,8 @@ class NotificationTableViewController: UITableViewController {
             
         }
         
-        let url = URL(string: "http://140.121.197.197:3000/getUserNotificationList?facebook_token="+userData!.facebookAccessToken)!
-        
-        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            
-            if let data = data, let results = try?
-                decoder.decode(NotificationListData.self, from: data)
-            {
-                print("json load success")
-                print(results)
-                self.notificationListData = results
-                self.tableView.reloadData()
-            } else {
-                print("error")
-            }
-        }
-        
-        task.resume()
+        self.getNotificationListData()
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -92,8 +83,81 @@ class NotificationTableViewController: UITableViewController {
         return cell
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("selected cell \(indexPath.row)")
+        self.getNotificationListData()
+        let refreshAlert = UIAlertController(title: "刪除", message: "你想要刪除這個通知嗎？", preferredStyle: UIAlertControllerStyle.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "刪除", style: .default, handler: { (action: UIAlertAction!) in
+            print("Handle 刪除 logic here")
+            self.removeNotification(facebookAccessToken: (self.userData?.facebookAccessToken)!, notificationData: (self.notificationListData?.data[indexPath.row].data)!)
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Handle Cancel Logic here")
+        }))
+        
+        present(refreshAlert, animated: true, completion: nil)
+    }
     
-
+    func removeNotification(facebookAccessToken: String, notificationData: NotificationListData.NotificationData.Data) {
+        do {
+            let jsonData = try JSONEncoder().encode(notificationData)
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            let urlString = "http://140.121.197.197:3000/removeNotification?facebook_token="+facebookAccessToken+"&notification_data="+jsonString
+            print(urlString)
+            let urlWithPercentEscapes = urlString.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+            let url = URL(string: urlWithPercentEscapes!)!
+            
+            let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                if let data = data, let results = try?
+                    decoder.decode(ResponseCode.self, from: data)
+                {
+                    print(results)
+                    if(results.code == "200"){
+                        print("removeNotification success")
+                        self.getNotificationListData()
+                        
+                    } else {
+                        print("removeNotification error")
+                    }
+                    
+                } else {
+                    print("error")
+                }
+            }
+            task.resume()
+            
+        } catch {
+            //handle error
+            print(error)
+        }
+    }
+    
+    func getNotificationListData () {
+        let url = URL(string: "http://140.121.197.197:3000/getUserNotificationList?facebook_token="+userData!.facebookAccessToken)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            if let data = data, let results = try?
+                decoder.decode(NotificationListData.self, from: data)
+            {
+                print("json load success")
+                print(results)
+                self.notificationListData = results
+                self.tableView.reloadData()
+            } else {
+                print("error")
+            }
+        }
+        
+        task.resume()
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

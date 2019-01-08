@@ -14,6 +14,7 @@ import FBSDKLoginKit
 class LoginViewController: UIViewController {
 
     var userData: UserData?
+    var deviceToken: DeviceToken?
     
     @IBAction func unwindSegueToLogin(segue: UIStoryboardSegue){
         //回到登入畫面的unwind segue
@@ -22,6 +23,14 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        if let data = DeviceToken.read() {
+            deviceToken = data
+            
+        } else {
+            //no user data
+            //logout user
+            
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,6 +70,7 @@ class LoginViewController: UIViewController {
     func loginButtonDidLogout(_ loginButton: FBSDKLoginButton!) {
         print("User Logout")
     }
+    
     func getFBUserData() {
         
         if(FBSDKAccessToken.current() != nil) {
@@ -87,6 +97,7 @@ class LoginViewController: UIViewController {
                     let facebookAccessToken = FBSDKAccessToken.current()?.tokenString as! String
                     print(facebookAccessToken)
                     UserData.save(userData: UserData(name: name, email: email, facebookID: facebookID, pictureUrl: pictureUrl, facebookAccessToken: facebookAccessToken))
+                    self.addAccount(facebookAccessToken: facebookAccessToken, deviceToken: self.deviceToken!.token)
                     
                     
                 }
@@ -95,6 +106,36 @@ class LoginViewController: UIViewController {
                     print(error)
                 }
             })
+        }
+    }
+    
+    func addAccount(facebookAccessToken: String, deviceToken: String) {
+        do {
+            let urlString = "http://140.121.197.197:3000/addAccount?facebook_token="+facebookAccessToken+"&device_token="+deviceToken
+            print(urlString)
+            let urlWithPercentEscapes = urlString.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+            let url = URL(string: urlWithPercentEscapes!)!
+            
+            let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                if let data = data, let results = try?
+                    decoder.decode(ResponseCode.self, from: data)
+                {
+                    print(results)
+                    if(results.code == "200"){
+                        print("addAccount success")
+                    } else {
+                        print("addAccount error")
+                    }
+                    
+                } else {
+                    print("error")
+                }
+            }
+            
+            task.resume()
         }
     }
 }

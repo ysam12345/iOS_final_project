@@ -184,8 +184,7 @@ class MapTableViewController: UITableViewController, MKMapViewDelegate, UITextFi
         
         if(recognizer.state == UIGestureRecognizerState.began) {
             print("A long press has began.")
-            mapView.removeAnnotations(mapView.annotations)
-            mapView.removeOverlays(mapView.overlays)
+            self.loadNotificationList()
             let touchedAt = recognizer.location(in: self.mapView) // adds the location on the view it was pressed
             let touchedAtCoordinate : CLLocationCoordinate2D = mapView.convert(touchedAt, toCoordinateFrom: self.mapView) // will get coordinates
             
@@ -196,9 +195,7 @@ class MapTableViewController: UITableViewController, MKMapViewDelegate, UITextFi
             lon = touchedAtCoordinate.longitude
             mapView.addAnnotation(newPin)
             
-            for var i in (notificationListData?.data)! {
-                self.addPointAndCircleToMapView(lat: i.data.lat, lon: i.data.lon, radius: i.data.radius, content: i.data.content)
-            }
+            
         }
         
         print("A long press has been detected.")

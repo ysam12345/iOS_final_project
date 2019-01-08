@@ -15,6 +15,7 @@
 		9932AF6921E0BF9600DE22CE /* NotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9932AF6821E0BF9600DE22CE /* NotificationTableViewController.swift */; };
 		9932AF6B21E0C02C00DE22CE /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9932AF6A21E0C02C00DE22CE /* NotificationTableViewCell.swift */; };
 		9932AF6D21E0F28A00DE22CE /* NotificationListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9932AF6C21E0F28A00DE22CE /* NotificationListData.swift */; };
+		997F1E7421E52AE2007899E9 /* DeviceToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997F1E7321E52AE2007899E9 /* DeviceToken.swift */; };
 		99AB2DD121DF0A230008F2DF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99AB2DD021DF0A230008F2DF /* MapKit.framework */; };
 		99DE81F321DE3DE500EE54EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE81F221DE3DE500EE54EC /* AppDelegate.swift */; };
 		99DE81F521DE3DE500EE54EC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE81F421DE3DE500EE54EC /* LoginViewController.swift */; };
@@ -57,6 +58,7 @@
 		9932AF6821E0BF9600DE22CE /* NotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewController.swift; sourceTree = "<group>"; };
 		9932AF6A21E0C02C00DE22CE /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		9932AF6C21E0F28A00DE22CE /* NotificationListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListData.swift; sourceTree = "<group>"; };
+		997F1E7321E52AE2007899E9 /* DeviceToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceToken.swift; sourceTree = "<group>"; };
 		99AB2DD021DF0A230008F2DF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		99AB2DD221DF0A340008F2DF /* iOS_final_project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS_final_project.entitlements; sourceTree = "<group>"; };
 		99DE81EF21DE3DE500EE54EC /* iOS_final_project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_final_project.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +172,7 @@
 				9932AF6A21E0C02C00DE22CE /* NotificationTableViewCell.swift */,
 				9932AF6C21E0F28A00DE22CE /* NotificationListData.swift */,
 				99E4D7CD21E50BA1009FA8D8 /* ResponseCode.swift */,
+				997F1E7321E52AE2007899E9 /* DeviceToken.swift */,
 			);
 			path = iOS_final_project;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				9932AF6B21E0C02C00DE22CE /* NotificationTableViewCell.swift in Sources */,
 				9932AF6921E0BF9600DE22CE /* NotificationTableViewController.swift in Sources */,
 				99E4D7CE21E50BA1009FA8D8 /* ResponseCode.swift in Sources */,
+				997F1E7421E52AE2007899E9 /* DeviceToken.swift in Sources */,
 				9932AF6D21E0F28A00DE22CE /* NotificationListData.swift in Sources */,
 				9932AF6321DFA38500DE22CE /* UserData.swift in Sources */,
 				99DE81F521DE3DE500EE54EC /* LoginViewController.swift in Sources */,
