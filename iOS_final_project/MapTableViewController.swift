@@ -8,24 +8,60 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-class MapTableViewController: UITableViewController {
+class MapTableViewController: UITableViewController, MKMapViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var latlonLabel: UILabel!
     @IBOutlet weak var radiusSegmented: UISegmentedControl!
-    @IBOutlet weak var timeInput: UIDatePicker!
+    @IBOutlet weak var contentInput: UITextField!
     @IBOutlet weak var addButton: UIButton!
+    
     
     var lat: Double = 0
     var lon: Double = 0
     
     var userData : UserData?
+    var notificationListData : NotificationListData?
+    var locationManager: CLLocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        mapView.delegate = self
+        contentInput.delegate = self
+        
+        
+        if let data = UserData.read() {
+            userData = data
+            
+        } else {
+            //no user data
+            //logout user
+            
+        }
+        
+        locationManager = CLLocationManager()
+        
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            locationManager.requestAlwaysAuthorization()
+        }
+            // 2. 用戶不同意
+        else if CLLocationManager.authorizationStatus() == .denied {
+            DispatchQueue.main.async(){
+                let alertController = UIAlertController(title: "定位權限已關閉", message: "如要變更權限，請至 設定 > 隱私權 > 定位服務 開啟", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }//DispatchQueue
+        }
+            // 3. 用戶已經同意
+        else if CLLocationManager.authorizationStatus() == .authorizedAlways {
+            locationManager.startUpdatingLocation()
+        }
+        
+        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MapTableViewController.mapLongPress(_:))) // colon needs to pass through info
         longPress.minimumPressDuration = 1.0 // in seconds
         mapView.addGestureRecognizer(longPress)
@@ -34,13 +70,113 @@ class MapTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.loadNotificationList()
+        
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
+        let radiusArray = [10, 100, 500, 1000, 10000]
         print("AddButton has been pressed.")
-        print(lat,lon)
-        print(radiusSegmented.selectedSegmentIndex)
-        print(timeInput)
+        if(latlonLabel.text=="latlon") {
+            DispatchQueue.main.async(){
+                let alertController = UIAlertController(title: "未選擇座標", message: "請長按選取座標", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }//DispatchQueue
+        } else if (contentInput.text=="") {
+            DispatchQueue.main.async(){
+                let alertController = UIAlertController(title: "未填寫通知內容", message: "請填入通知內容", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }//DispatchQueue
+        } else {
+            struct Data: Codable {
+                var lat: Float64
+                var lon: Float64
+                var radius: Int
+                var content: String
+            }
+            
+  
+            let data = Data(lat: lat, lon: lon, radius: radiusArray[radiusSegmented.selectedSegmentIndex], content: contentInput.text!)
+            
+            do {
+                let jsonData = try JSONEncoder().encode(data)
+                let jsonString = String(data: jsonData, encoding: .utf8)!
+                let urlString = "http://140.121.197.197:3000/addNotification?facebook_token="+self.userData!.facebookAccessToken+"&notification_data="+jsonString
+                print(urlString)
+                let urlWithPercentEscapes = urlString.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+                let url = URL(string: urlWithPercentEscapes!)!
+                
+                let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    
+                    if let data = data, let results = try?
+                        decoder.decode(ResponseCode.self, from: data)
+                    {
+                        print(results)
+                        if(results.code == "200"){
+                            DispatchQueue.main.async(){
+                                let alertController = UIAlertController(title: "成功", message: "增加通知成功", preferredStyle: .alert)
+                                let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                                alertController.addAction(okAction)
+                                self.present(alertController, animated: true, completion: nil)
+                                self.loadNotificationList()
+                                
+                            }//DispatchQueue
+                        } else {
+                            DispatchQueue.main.async(){
+                                let alertController = UIAlertController(title: "失敗", message: "發生錯誤", preferredStyle: .alert)
+                                let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                                alertController.addAction(okAction)
+                                self.present(alertController, animated: true, completion: nil)
+                            }//DispatchQueue
+                        }
+
+                    } else {
+                        print("error")
+                    }
+                }
+                
+                task.resume()
+            } catch {
+                //handle error
+                print(error)
+            }
+            
+            
+        }
+        
+
+    }
+    
+    func loadNotificationList() {
+        let url = URL(string: "http://140.121.197.197:3000/getUserNotificationList?facebook_token="+userData!.facebookAccessToken)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            if let data = data, let results = try?
+                decoder.decode(NotificationListData.self, from: data)
+            {
+                print("json load success")
+                print(results)
+                self.mapView.removeAnnotations(self.mapView.annotations)
+                self.mapView.removeOverlays(self.mapView.overlays)
+                self.notificationListData = results
+                for var i in results.data {
+                    self.addPointAndCircleToMapView(lat: i.data.lat, lon: i.data.lon, radius: i.data.radius, content: i.data.content)
+                }
+            } else {
+                print("error")
+            }
+        }
+        
+        task.resume()
     }
     
     @objc func mapLongPress(_ recognizer: UIGestureRecognizer) {
@@ -49,6 +185,7 @@ class MapTableViewController: UITableViewController {
         if(recognizer.state == UIGestureRecognizerState.began) {
             print("A long press has began.")
             mapView.removeAnnotations(mapView.annotations)
+            mapView.removeOverlays(mapView.overlays)
             let touchedAt = recognizer.location(in: self.mapView) // adds the location on the view it was pressed
             let touchedAtCoordinate : CLLocationCoordinate2D = mapView.convert(touchedAt, toCoordinateFrom: self.mapView) // will get coordinates
             
@@ -58,10 +195,38 @@ class MapTableViewController: UITableViewController {
             lat = touchedAtCoordinate.latitude
             lon = touchedAtCoordinate.longitude
             mapView.addAnnotation(newPin)
+            
+            for var i in (notificationListData?.data)! {
+                self.addPointAndCircleToMapView(lat: i.data.lat, lon: i.data.lon, radius: i.data.radius, content: i.data.content)
+            }
         }
         
         print("A long press has been detected.")
 
+    }
+    
+    func addPointAndCircleToMapView( lat: Double, lon: Double, radius: Int, content: String) {
+        let newPin = MKPointAnnotation()
+        let coordinate = CLLocationCoordinate2D(latitude: lat,longitude: lon)
+        newPin.coordinate = coordinate
+        newPin.title = content
+        let circle = MKCircle(center: coordinate, radius: CLLocationDistance(radius))
+        mapView.add(circle)
+        mapView.addAnnotation(newPin)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard overlay is MKCircle else { return MKOverlayRenderer() }
+        let circle = MKCircleRenderer(overlay: overlay)
+        circle.strokeColor = UIColor.red
+        circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+        circle.lineWidth = 1
+        return circle
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     // MARK: - Table view data source

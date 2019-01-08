@@ -86,7 +86,7 @@ class NotificationTableViewController: UITableViewController {
             cell.lat.text = String(format: "%.4f", notification.data.lat)
             cell.lon.text = String(format: "%.4f", notification.data.lon)
             cell.radius.text = String(notification.data.radius) + "公尺"
-            cell.time.text = notification.data.time
+            cell.content.text = notification.data.content
         }
         print("cell-",cell)
         return cell

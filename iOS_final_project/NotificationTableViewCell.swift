@@ -13,7 +13,7 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var lat: UILabel!
     @IBOutlet weak var lon: UILabel!
     @IBOutlet weak var radius: UILabel!
-    @IBOutlet weak var time: UILabel!
+    @IBOutlet weak var content: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

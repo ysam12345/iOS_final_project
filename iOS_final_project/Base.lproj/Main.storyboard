@@ -145,20 +145,20 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="10" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i1M-iv-LAz">
-                                                    <rect key="frame" x="106" y="-81" width="269" height="204"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <date key="date" timeIntervalSinceReferenceDate="568308689.10581195">
-                                                        <!--2019-01-04 15:31:29 +0000-->
-                                                    </date>
-                                                </datePicker>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="時間" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bsD-hL-knw">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="通知內容" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bsD-hL-knw">
                                                     <rect key="frame" x="37" y="5" width="82" height="33"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hDJ-DC-qC3">
+                                                    <rect key="frame" x="132" y="6" width="227" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -191,10 +191,10 @@
                     <navigationItem key="navigationItem" title="地圖" id="X9M-Ag-vzH"/>
                     <connections>
                         <outlet property="addButton" destination="8W0-1j-NVD" id="JbD-jE-y3p"/>
+                        <outlet property="contentInput" destination="hDJ-DC-qC3" id="yzy-up-aNS"/>
                         <outlet property="latlonLabel" destination="8kO-LN-gew" id="tKS-aq-AY3"/>
                         <outlet property="mapView" destination="aX3-Jq-daq" id="QZQ-A2-eOV"/>
                         <outlet property="radiusSegmented" destination="026-6O-CnA" id="0R6-fs-ZGo"/>
-                        <outlet property="timeInput" destination="i1M-iv-LAz" id="Iu2-h7-OfH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k8a-JN-lO0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -231,7 +231,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="時間：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5dm-Wy-odP">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="內容：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5dm-Wy-odP">
                                             <rect key="frame" x="33" y="79" width="62" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -266,8 +266,8 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SqK-sp-RBw">
-                                            <rect key="frame" x="97" y="79" width="125" height="24"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SqK-sp-RBw">
+                                            <rect key="frame" x="97" y="79" width="244" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
@@ -283,10 +283,10 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="content" destination="SqK-sp-RBw" id="bYn-RB-YCF"/>
                                     <outlet property="lat" destination="jqS-Pw-nA9" id="3Jq-Ep-vOt"/>
                                     <outlet property="lon" destination="i9F-E1-li3" id="p3W-2t-VVW"/>
                                     <outlet property="radius" destination="In8-5J-Vhx" id="OHv-9y-adm"/>
-                                    <outlet property="time" destination="SqK-sp-RBw" id="b5E-wN-3gN"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -388,12 +388,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iaf-Ir-2ej">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="通知功能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uqr-r5-Ad1">
+                                                    <rect key="frame" x="16" y="11" width="70" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rOI-gc-8DM">
+                                                    <rect key="frame" x="207" y="6" width="49" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </switch>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="usw-Jw-XAe">
+                                        <rect key="frame" x="0.0" y="354" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="usw-Jw-XAe" id="XOz-5c-Btn">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPx-kB-c7m">
                                                     <rect key="frame" x="16" y="6" width="343" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="登出"/>
                                                     <connections>
-                                                        <segue destination="Eyw-0M-wps" kind="unwind" unwindAction="unwindSegueToLoginWithSegue:" id="pIB-SV-atI"/>
+                                                        <segue destination="Eyw-0M-wps" kind="unwind" unwindAction="unwindSegueToLoginWithSegue:" id="eSn-SZ-1Es"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -409,6 +430,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="個人資訊" id="Xev-sU-Ce4"/>
                     <connections>
+                        <outlet property="notificationFunctionSwitch" destination="rOI-gc-8DM" id="SEb-C9-UmO"/>
                         <outlet property="userEmail" destination="bXv-Wr-6ta" id="WBp-eE-9SI"/>
                         <outlet property="userImage" destination="nuA-jD-q2P" id="bOQ-RX-dwh"/>
                         <outlet property="userName" destination="XBw-bR-Yp0" id="jxy-I8-xdZ"/>

@@ -23,6 +23,7 @@
 		99DE81FD21DE3DE600EE54EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99DE81FB21DE3DE600EE54EC /* LaunchScreen.storyboard */; };
 		99DE820821DE3DE600EE54EC /* iOS_final_projectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE820721DE3DE600EE54EC /* iOS_final_projectTests.swift */; };
 		99DE821321DE3DE600EE54EC /* iOS_final_projectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE821221DE3DE600EE54EC /* iOS_final_projectUITests.swift */; };
+		99E4D7CE21E50BA1009FA8D8 /* ResponseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E4D7CD21E50BA1009FA8D8 /* ResponseCode.swift */; };
 		F12F4EB047539939D806B480 /* Pods_iOS_final_projectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B2FD848797A4D766A80668 /* Pods_iOS_final_projectTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		99DE820E21DE3DE600EE54EC /* iOS_final_projectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOS_final_projectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		99DE821221DE3DE600EE54EC /* iOS_final_projectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_final_projectUITests.swift; sourceTree = "<group>"; };
 		99DE821421DE3DE600EE54EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99E4D7CD21E50BA1009FA8D8 /* ResponseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseCode.swift; sourceTree = "<group>"; };
 		AB17D09B63A61F71F69B2C6D /* Pods-iOS_final_projectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_final_projectUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_final_projectUITests/Pods-iOS_final_projectUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BB981C365EDF46600A25A94A /* Pods_iOS_final_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_final_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E77F36790A3EA13A8377C920 /* Pods-iOS_final_projectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_final_projectUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_final_projectUITests/Pods-iOS_final_projectUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				9932AF6821E0BF9600DE22CE /* NotificationTableViewController.swift */,
 				9932AF6A21E0C02C00DE22CE /* NotificationTableViewCell.swift */,
 				9932AF6C21E0F28A00DE22CE /* NotificationListData.swift */,
+				99E4D7CD21E50BA1009FA8D8 /* ResponseCode.swift */,
 			);
 			path = iOS_final_project;
 			sourceTree = "<group>";
@@ -266,7 +269,7 @@
 								enabled = 1;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -413,6 +416,7 @@
 			files = (
 				9932AF6B21E0C02C00DE22CE /* NotificationTableViewCell.swift in Sources */,
 				9932AF6921E0BF9600DE22CE /* NotificationTableViewController.swift in Sources */,
+				99E4D7CE21E50BA1009FA8D8 /* ResponseCode.swift in Sources */,
 				9932AF6D21E0F28A00DE22CE /* NotificationListData.swift in Sources */,
 				9932AF6321DFA38500DE22CE /* UserData.swift in Sources */,
 				99DE81F521DE3DE500EE54EC /* LoginViewController.swift in Sources */,
@@ -592,6 +596,7 @@
 			baseConfigurationReference = 5DFCA1ECF3C7452C496515E5 /* Pods-iOS_final_project.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS_final_project/iOS_final_project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GG767D55Q8;
 				INFOPLIST_FILE = iOS_final_project/Info.plist;
@@ -622,6 +627,7 @@
 			baseConfigurationReference = 3AB7C5CD1EDC469891F80755 /* Pods-iOS_final_project.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS_final_project/iOS_final_project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GG767D55Q8;
 				INFOPLIST_FILE = iOS_final_project/Info.plist;

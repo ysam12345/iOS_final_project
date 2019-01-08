@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import CoreLocation
+import UserNotifications
 
 class UserInformationTableViewController: UITableViewController {
     
     var userData : UserData?
-    
+    var notificationListData : NotificationListData?
 
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userEmail: UILabel!
+    @IBOutlet weak var notificationFunctionSwitch: UISwitch!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +37,9 @@ class UserInformationTableViewController: UITableViewController {
             userName.text = userData?.name
             userEmail.text = userData?.email
             
+            notificationFunctionSwitch.addTarget(self, action: #selector(switchChanged), for: UIControl.Event.valueChanged)
+            self.loadNotificationList()
+ 
         } else {
             //no user data
             //logout user
@@ -45,7 +53,65 @@ class UserInformationTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
     }
-
+    
+    @objc func switchChanged(mySwitch: UISwitch) {
+        let value = mySwitch.isOn
+        if(value == true) {
+            //switch on
+            var counter = 0
+            for var i in notificationListData!.data {
+                let center = CLLocationCoordinate2D(latitude:  i.data.lat, longitude: i.data.lon)
+                let region = CLCircularRegion(center: center, radius: CLLocationDistance(i.data.radius), identifier: String(counter))
+                region.notifyOnEntry = true
+                region.notifyOnExit = false
+                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+                
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: "地理推播", arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: i.data.content, arguments: nil)
+                content.sound = UNNotificationSound.default()
+       
+                let request = UNNotificationRequest(identifier: String(counter), content: content, trigger: trigger)
+                // Schedule the notification.
+                let notificationCenter = UNUserNotificationCenter.current()
+                notificationCenter.add(request)
+                
+                counter += 1
+            }
+        } else {
+            //cancel all notification
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            
+        }
+        // Do something
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
+            for request in requests {
+                print(request)
+            }
+        })
+    }
+    
+    func loadNotificationList() {
+        let url = URL(string: "http://140.121.197.197:3000/getUserNotificationList?facebook_token="+userData!.facebookAccessToken)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response , error) in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            if let data = data, let results = try?
+                decoder.decode(NotificationListData.self, from: data)
+            {
+                print("json load success")
+                print(results)
+                self.notificationListData = results
+            } else {
+                print("error")
+            }
+        }
+        
+        task.resume()
+    }
     // MARK: - Table view data source
     /*
     override func numberOfSections(in tableView: UITableView) -> Int {

@@ -14,7 +14,7 @@ struct NotificationListData: Codable {
             var lat: Float64
             var lon: Float64
             var radius: Int
-            var time: String
+            var content: String
         }
         var facebook_id: String
         var data: Data
